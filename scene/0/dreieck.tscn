@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdmfg4eus0xon"]
+
+[ext_resource type="Script" path="res://scene/0/dreieck.gd" id="1_lopr7"]
+
+[node name="Dreieck" type="Polygon2D"]
+script = ExtResource("1_lopr7")

@@ -1,0 +1,41 @@
+2a60927148abd1d33b818b535e306557
+::res://::1684893505
+icon.png::CompressedTexture2D::2432420761471245026::1676094585::1682073341::1::::<><>::
+icon.svg::CompressedTexture2D::9162371498834860976::1679058444::1682073341::1::::<><>::
+README.md::TextFile::-1::1684410542::0::1::::<><>::
+::res://asset/::1684893483
+default_env.tres::Environment::-1::1677963175::0::1::::<><>::
+::res://asset/font/::1684893483
+2TECH2.TTF::FontFile::6714203843499721375::1682126232::1684873968::1::::<><>::
+ALBA____.TTF::FontFile::4234611237747425266::1673874020::1682073340::1::::<><>::
+basic_label_setting.tres::LabelSettings::8721648622212071911::1682973059::0::1::::<><>::uid://dk3ytja0i6utv
+Marlboro.ttf::FontFile::1499582478604000857::1673874020::1682073340::1::::<><>::
+metal lord ot.otf::FontFile::3619300847126422558::1682126186::1682151714::1::::<><>::
+neuropolitical rg.otf::FontFile::2325526762121942984::1336566082::1682151714::1::::<><>::
+rimouski sb.otf::FontFile::2683584631797712805::1657615528::1682151714::1::::<><>::
+::res://asset/json/::1683808593
+::res://asset/png/::1684893483
+circle_black_16.png::CompressedTexture2D::8621509779724911139::1679229887::1682073341::1::::<><>::
+::res://asset/png/sektor/::1684893483
+empty.png::CompressedTexture2D::1763396454069034803::1682149968::1682150005::1::::<><>::
+filled.png::CompressedTexture2D::8616010504473682836::1682149973::1682150005::1::::<><>::
+::res://asset/tileset/::1683808601
+::res://scene/::1684893483
+::res://scene/0/::1684893483
+blatt.gd::GDScript::-1::1684874588::0::1::::<>Node2D<>::
+blatt.tscn::PackedScene::5811978791590085557::1684893315::0::1::::<><>::res://scene/0/blatt.gd
+dreieck.gd::GDScript::-1::1684878982::0::1::::<>Polygon2D<>::
+dreieck.tscn::PackedScene::5008496261366422317::1684893315::0::1::::<><>::res://scene/0/dreieck.gd
+punkt.gd::GDScript::-1::1684879022::0::1::::<>Polygon2D<>::
+punkt.tscn::PackedScene::4023748704940884955::1684893315::0::1::::<><>::res://scene/0/punkt.gd
+::res://scene/1/::1684893483
+meer.tscn::PackedScene::8762948595340985954::1684893315::0::1::::<><>::
+wasserscheide.gd::GDScript::-1::1684884002::0::1::::<>Line2D<>::
+wasserscheide.tscn::PackedScene::5963330172157626456::1684893315::0::1::::<><>::res://scene/1/wasserscheide.gd
+::res://scene/game/::1684893483
+Game.gd::GDScript::-1::1684884125::0::1::::<>Node<>::
+Game.tscn::PackedScene::8246655032211948728::1684893315::0::1::::<><>::res://scene/game/Game.gd
+::res://script/::1684893483
+Classes_0.gd::GDScript::-1::1684892836::0::1::::<>Node<>::
+Classes_1.gd::GDScript::-1::1684893303::0::1::::<>Node<>::
+Global.gd::GDScript::-1::1684889201::0::1::::<>Node<>::

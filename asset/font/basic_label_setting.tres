@@ -1,0 +1,6 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://dwi3jqaqpjep8"]
+
+[ext_resource type="FontFile" uid="uid://dk3ytja0i6utv" path="res://asset/font/ELEPHNT.TTF" id="1_chnnv"]
+
+[resource]
+font = ExtResource("1_chnnv")

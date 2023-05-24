@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpq0g6jrlkuea"]
+
+[ext_resource type="Script" path="res://scene/game/Game.gd" id="1_35sda"]
+
+[node name="Game" type="Node"]
+script = ExtResource("1_35sda")
+
+[node name="FPS" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Layer0" type="Node" parent="."]
+
+[node name="Layer1" type="Node" parent="."]
+
+[node name="Layer2" type="Node" parent="."]
+
+[node name="Layer3" type="Node" parent="."]

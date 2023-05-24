@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://co2mpao7gvfp2"]
+
+[ext_resource type="Script" path="res://scene/0/blatt.gd" id="1_m6amn"]
+
+[node name="Blatt" type="Node2D"]
+script = ExtResource("1_m6amn")
+
+[node name="Dreieck" type="Node2D" parent="."]
+
+[node name="Punkt" type="Node2D" parent="."]

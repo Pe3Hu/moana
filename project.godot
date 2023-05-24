@@ -1,0 +1,32 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="moana"
+run/main_scene="res://scene/game/Game.tscn"
+config/features=PackedStringArray("4.0", "Forward Plus")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://script/Global.gd"
+Classes_0="*res://script/Classes_0.gd"
+Classes_1="*res://script/Classes_1.gd"
+Classes_2="*res://script/Classes_2.gd"
+Classes_3="*res://script/Classes_3.gd"
+Classes_4="*res://script/Classes_4.gd"
+Classes_5="*res://script/Classes_5.gd"
+Classes_6="*res://script/Classes_6.gd"
+
+[display]
+
+window/size/viewport_width=1400
+window/size/viewport_height=800

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dw33qopcqdqlu"]
+
+[node name="Meer" type="Node2D"]
+
+[node name="Unwetter" type="Node2D" parent="."]
+
+[node name="Wasserscheide" type="Node2D" parent="."]

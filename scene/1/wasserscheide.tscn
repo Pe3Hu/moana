@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cq7xgaikrk5jo"]
+
+[ext_resource type="Script" path="res://scene/1/wasserscheide.gd" id="1_i1l33"]
+
+[node name="Wasserscheide" type="Line2D"]
+width = 2.0
+script = ExtResource("1_i1l33")
