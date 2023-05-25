@@ -352,18 +352,17 @@ func nearest_point_on_line_through_another_point(fringe_: Classes_0.Fringe, punk
 	
 	var ab = b-a
 	var ac = c-a
-#	var proj = ab.dot(ac)
-#	var l = ab.length_squared()
-#	var d = proj/l
-#	var dc = null
+	var proj = ab.dot(ac)
+	var l = ab.length_squared()
+	var d = proj/l
+	var dc = null
 #
 #	#if d <= 0:
 #	#	dc = a
 #	#elif d >= 1:
 #	#	dc = b
 #	#else:
-#	dc = a + ab * d
-	
+	dc = a + ab * d
 	return a+ac.project(ab)
 
 
@@ -380,4 +379,20 @@ func line_line_intersection(lines_: Array) -> Variant:
 
 
 func point_inside_rect(point_: Vector2, rect_: Array) -> bool:
-	return point_.x >= rect_.front().x and point_.y >= rect_.front().y and point_.x <= rect_.back().x and point_.y < rect_.back().y
+	var min = Vector2()
+	min.x = min(rect_.front().x, rect_.back().x)
+	min.y = min(rect_.front().y, rect_.back().y)
+	var max = Vector2()
+	max.x = max(rect_.front().x, rect_.back().x)
+	max.y = max(rect_.front().y, rect_.back().y)
+	return point_.x >= min.x and point_.x <= max.x and point_.y >= min.y and point_.y <= max.y
+
+
+func get_circumcenter(points_: Array) -> Vector2:
+	var a = points_[0]
+	var b = points_[1]
+	var c = points_[2]
+	var d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2
+	var x = ((pow(a.x,2) + pow(a.y,2)) * (b.y - c.y) + (pow(b.x,2) + pow(b.y,2)) * (c.y - a.y) + (pow(c.x,2) + pow(c.y,2)) * (a.y - b.y))/d
+	var y = ((pow(a.x,2) + pow(a.y,2)) * (c.x - b.x) + (pow(b.x,2) + pow(b.y,2)) * (a.x - c.x) + (pow(c.x,2) + pow(c.y,2)) * (b.x - a.x))/d
+	return Vector2(x,y)

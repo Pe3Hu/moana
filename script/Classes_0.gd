@@ -18,6 +18,7 @@ class Punkt:
 		word.type = input_.type
 		vec.position = input_.position
 		obj.blatt = input_.blatt
+		obj.circumcenter = null
 		flag.temp = false
 		flag.border = false
 		arr.dreieck = []
@@ -51,14 +52,17 @@ class Dreieck:
 	var vec = {}
 	var arr = {}
 	var obj = {}
+	var dict = {}
 	var scene = {}
 
 
 	func _init(input_):
 		num.index = Global.num.index.dreieck
 		Global.num.index.dreieck += 1
-		arr.punkt = input_.punkts
 		obj.blatt = input_.blatt
+		arr.punkt = input_.punkts
+		dict.wasserscheide = {}
+		dict.fringe = {}
 		init_scene()
 		set_circumcenter()
 		
@@ -73,14 +77,13 @@ class Dreieck:
 
 
 	func set_circumcenter() -> void:
-		var a = arr.punkt[0].scene.myself.position
-		var b = arr.punkt[1].scene.myself.position
-		var c = arr.punkt[2].scene.myself.position
-		var d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2
-		var x = ((pow(a.x,2) + pow(a.y,2)) * (b.y - c.y) + (pow(b.x,2) + pow(b.y,2)) * (c.y - a.y) + (pow(c.x,2) + pow(c.y,2)) * (a.y - b.y))/d
-		var y = ((pow(a.x,2) + pow(a.y,2)) * (c.x - b.x) + (pow(b.x,2) + pow(b.y,2)) * (a.x - c.x) + (pow(c.x,2) + pow(c.y,2)) * (b.x - a.x))/d
-		vec.circumcenter = Vector2(x,y)
-		num.radius = vec.circumcenter.distance_to(a)
+		var points = []
+		
+		for punkt in arr.punkt:
+			points.append(punkt.scene.myself.position)
+		
+		vec.circumcenter = Global.get_circumcenter(points)
+		num.radius = vec.circumcenter.distance_to(points.front())
 		
 		var input = {}
 		input.type = "pole"
@@ -88,6 +91,7 @@ class Dreieck:
 		input.position = vec.circumcenter
 		obj.pole = Classes_0.Punkt.new(input)
 		obj.blatt.arr.pole.append(obj.pole)
+		obj.pole.obj.circumcenter = self
 
 
 	func get_edges() -> Array:
@@ -160,6 +164,11 @@ class Fringe:
 		for dreieck in dreiecks.keys():
 			if dreiecks[dreieck] == 2:
 				arr.dreieck.append(dreieck)
+				
+				for punkt in dreieck.arr.punkt:
+					if !arr.punkt.has(punkt):
+						dreieck.dict.fringe[self] = punkt
+						break
 
 
 #лист blatt
@@ -186,8 +195,8 @@ class Blatt:
 		arr.pole = []
 		var w = Global.vec.size.window.width
 		var h = Global.vec.size.window.height
-		var n = 10
-		var gap = 0.1
+		var n = 4
+		var gap = 0.3
 		var input = {}
 		input.type = "ship"
 		input.blatt = self
