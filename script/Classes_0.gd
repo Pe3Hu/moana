@@ -8,6 +8,7 @@ class Punkt:
 	var arr = {}
 	var obj = {}
 	var word = {}
+	var dict = {}
 	var flag = {}
 	var scene = {}
 
@@ -23,6 +24,7 @@ class Punkt:
 		flag.border = false
 		arr.dreieck = []
 		arr.fringe = []
+		#dict.wasserscheide = {}
 		init_scene()
 
 
@@ -164,11 +166,15 @@ class Fringe:
 		for dreieck in dreiecks.keys():
 			if dreiecks[dreieck] == 2:
 				arr.dreieck.append(dreieck)
+			
+			if !dreieck.dict.fringe.keys().has(self):
+				var punkts = []
+				punkts.append_array(dreieck.arr.punkt)
 				
-				for punkt in dreieck.arr.punkt:
-					if !arr.punkt.has(punkt):
-						dreieck.dict.fringe[self] = punkt
-						break
+				for punkt in arr.punkt:
+					punkts.erase(punkt)
+				
+				dreieck.dict.fringe[self] = punkts.front()
 
 
 #лист blatt

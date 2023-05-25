@@ -22,6 +22,7 @@ class Unwetter:
 class Wasserscheide:
 	var arr = {}
 	var obj = {}
+	var word = {}
 	var scene = {}
 
 
@@ -29,14 +30,31 @@ class Wasserscheide:
 		obj.meer = input_.meer
 		obj.fringe = input_.fringe
 		arr.pole = input_.poles
+		word.type = input_.type
 		init_scene()
 		
 		for dreieck in obj.fringe.arr.dreieck:
 #			for punkt in dreieck.arr.punkt:
 #				if !obj.fringe.arr.punkt.has(punkt):
-			var punkt = dreieck.dict.fringe[obj.fringe]
-			dreieck.dict.wasserscheide[punkt] = self
-					
+			var punkt = null
+			
+			match word.type:
+				"center":
+					punkt = dreieck.dict.fringe[obj.fringe]
+				"corner":
+					for punkt_ in obj.fringe.arr.punkt:
+						if !dreieck.dict.wasserscheide.keys().has(punkt_):
+							punkt = punkt_
+							break
+			
+			if punkt != null:
+				dreieck.dict.wasserscheide[punkt] = self
+				#punkt.dict.wasserscheide[obj.fringe] = self
+				punkt.scene.myself.set_color(Color.BLUE)
+				#print(punkt)
+				#print("___")
+			else:
+				print("wasserscheide error")
 
 
 	func init_scene() -> void:
@@ -92,6 +110,7 @@ class Meer:
 		for fringe in Global.obj.blatt.arr.fringe:
 			if fringe.arr.dreieck.size() == 2:
 				var input = {}
+				input.type = "center"
 				input.meer = self
 				input.fringe = fringe
 				input.poles = []
@@ -118,7 +137,7 @@ class Meer:
 							
 							for border in borders:
 								var lines = [border]
-								lines.append([point_on_fringe, punkt.scene.myself.position])
+								lines.append([point_on_fringe, dreieck.obj.pole.scene.myself.position])
 								var border_intersection = Global.line_line_intersection(lines)
 								
 								if border_intersection != null and Global.point_inside_rect(border_intersection, corners):
@@ -130,9 +149,6 @@ class Meer:
 									var circumcenter = Global.get_circumcenter(points)
 									var r = circumcenter.distance_to(points.front())
 									var d = circumcenter.distance_to(neighbor_punkt.scene.myself.position)
-									print("###")
-									print(d)
-									print(r)
 									
 									if d < r:
 										var input = {}
@@ -145,6 +161,7 @@ class Meer:
 										pole.flag.border = true
 										
 										input = {}
+										input.type = "corner"
 										input.meer = self
 										input.fringe = fringe
 										input.poles = [pole]

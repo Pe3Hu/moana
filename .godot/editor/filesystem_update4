@@ -4,6 +4,6 @@ res://scene/0/blatt.tscn
 res://scene/0/dreieck.tscn
 res://scene/1/wasserscheide.tscn
 res://scene/1/meer.tscn
-res://script/Classes_0.gd
 res://script/Classes_1.gd
-res://script/Global.gd
+res://script/Classes_0.gd
+res://scene/0/punkt.gd
