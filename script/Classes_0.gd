@@ -45,6 +45,12 @@ class Punkt:
 		for dreieck in arr.dreieck:
 			dreieck.arr.punkt.erase(self)
 		
+		for fringe in arr.fringe:
+			fringe.arr.ship.erase(self)
+		
+		for wasserscheide in arr.wasserscheide:
+			wasserscheide.arr.pole.erase(self)
+		
 		obj.blatt.arr[word.type].erase(self)
 		scene.myself.queue_free()
 
@@ -246,8 +252,8 @@ class Blatt:
 		arr.pole = []
 		var w = Global.vec.size.window.width
 		var h = Global.vec.size.window.height
-		var n = 5
-		var gap = 0.3
+		var n = 16
+		var gap = 0.05
 		var r = 150
 		var input = {}
 		input.type = "ship"
@@ -264,10 +270,10 @@ class Blatt:
 				var y = int(Global.rng.randf_range(gap, (1-gap)) * h)
 				input.position = Vector2(x,y)
 				
-				for ship in arr.ship:
-					if input.position.distance_to(ship.scene.myself.position) < r:
-						flag = false
-						break
+				#for ship in arr.ship:
+				#	if input.position.distance_to(ship.scene.myself.position) < r:
+				#		flag = false
+				#		break
 				
 			var punkt = Classes_0.Punkt.new(input)
 			arr.ship.append(punkt)
