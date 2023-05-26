@@ -347,8 +347,8 @@ func factorial(n_: int) -> int:
 
 
 func nearest_point_on_line_through_another_point(fringe_: Classes_0.Fringe, punkt_: Classes_0.Punkt) -> Vector2:
-	var a = fringe_.arr.punkt.front().scene.myself.position
-	var b = fringe_.arr.punkt.back().scene.myself.position
+	var a = fringe_.arr.ship.front().scene.myself.position
+	var b = fringe_.arr.ship.back().scene.myself.position
 	var c = punkt_.scene.myself.position
 	
 	var ab = b-a
@@ -367,7 +367,7 @@ func nearest_point_on_line_through_another_point(fringe_: Classes_0.Fringe, punk
 	return a+ac.project(ab)
 
 
-func line_line_intersection(lines_: Array) -> Variant:
+func lines_intersection(lines_: Array) -> Variant:
 	var a = lines_.front().front()
 	var b = lines_.front().back()
 	var c = lines_.back().front()

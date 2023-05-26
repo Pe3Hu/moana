@@ -165,13 +165,15 @@ class Dreieck:
 class Fringe:
 	var arr = {}
 	var obj = {}
+	var vec = {}
 	var scene = {}
 
 
 	func _init(input_):
 		obj.blatt = input_.blatt
-		arr.punkt = input_.punkts
+		arr.ship = input_.ships
 		arr.dreieck = input_.dreiecks
+		vec.intersection = null
 		init_scene()
 		set_punkts()
 
@@ -183,20 +185,38 @@ class Fringe:
 
 
 	func set_punkts() -> void:
-		for punkt in arr.punkt:
-			punkt.arr.fringe.append(self)
+		for ship in arr.ship:
+			ship.arr.fringe.append(self)
 		
 		for dreieck in arr.dreieck:
 			for punkt in dreieck.arr.punkt:
 				var edge = dreieck.get_opposite_edge_by_punkt(punkt)
 				var flag = true
 				
-				for punkt_ in arr.punkt:
-					flag = edge.has(punkt_) and flag
+				for ship in arr.ship:
+					flag = edge.has(ship) and flag
 				
 				if flag:
 					dreieck.dict.fringe[self] = punkt
 					break
+
+
+	func common_punkt_with_fringe(fringe_: Fringe) -> Variant:
+		var punkts = {}
+		var fringes = [self, fringe_]
+		
+		for fringe in fringes:
+			for ship in fringe.arr.ship:
+				if punkts.keys().has(ship):
+					punkts[ship] += 1
+				else:
+					punkts[ship] = 1
+		
+		for punkt in punkts.keys():
+			if punkts[punkt] == 2:
+				return punkt
+		
+		return null
 
 
 #лист blatt
@@ -364,7 +384,7 @@ class Blatt:
 		
 		for edge in edges:
 			var input = {}
-			input.punkts = edge
+			input.ships = edge
 			input.dreiecks = edges[edge]
 			input.blatt = self
 			var fringe = Classes_0.Fringe.new(input)

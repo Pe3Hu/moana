@@ -10,5 +10,5 @@ func set_parent(parent_) -> void:
 
 
 func set_vertexs() -> void:
-	for punkt in parent.arr.punkt:
-		add_point(punkt.scene.myself.position)
+	for ship in parent.arr.ship:
+		add_point(ship.scene.myself.position)

@@ -3,6 +3,5 @@
 [ext_resource type="Script" path="res://scene/0/punkt.gd" id="1_2y74e"]
 
 [node name="Punkt" type="Polygon2D"]
-visible = false
 color = Color(0, 0, 0, 1)
 script = ExtResource("1_2y74e")
