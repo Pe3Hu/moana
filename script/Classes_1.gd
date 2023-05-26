@@ -31,11 +31,34 @@ class Wasserscheide:
 		obj.fringe = input_.fringe
 		arr.pole = input_.poles
 		word.type = input_.type
+		obj.dreieck = input_.dreieck
 		init_scene()
 		
-		for dreieck in obj.fringe.arr.dreieck:
-#			for punkt in dreieck.arr.punkt:
-#				if !obj.fringe.arr.punkt.has(punkt):
+		set_punkt()
+
+
+	func init_scene() -> void:
+		scene.myself = Global.scene.wasserscheide.instantiate()
+		scene.myself.set_parent(self)
+		obj.meer.scene.myself.get_node("Wasserscheide").add_child(scene.myself)
+
+
+	func set_punkt() -> void:
+		for pole in arr.pole:
+			pole.arr.wasserscheide.append(self)
+
+
+	func set_punkt_old() -> void:
+		var dreiecks = []
+		
+		match word.type:
+				"center":
+					dreiecks.append_array(obj.fringe.arr.dreieck)
+				"corner":
+					dreiecks.append(obj.dreieck)
+		
+		for dreieck in dreiecks:
+			#if !obj.fringe.arr.punkt.has(punkt):
 			var punkt = null
 			
 			match word.type:
@@ -52,16 +75,8 @@ class Wasserscheide:
 				#punkt.dict.wasserscheide[obj.fringe] = self
 				punkt.scene.myself.set_color(Color.BLUE)
 				#print(punkt)
-				#print("___")
 			else:
 				print("wasserscheide error")
-
-
-	func init_scene() -> void:
-		scene.myself = Global.scene.wasserscheide.instantiate()
-		scene.myself.set_parent(self)
-		obj.meer.scene.myself.get_node("Wasserscheide").add_child(scene.myself)
-
 
 
 #море meer
@@ -113,6 +128,7 @@ class Meer:
 				input.type = "center"
 				input.meer = self
 				input.fringe = fringe
+				input.dreieck = null
 				input.poles = []
 				
 				for dreieck in fringe.arr.dreieck:
@@ -121,58 +137,110 @@ class Meer:
 				var wasserscheide = Classes_1.Wasserscheide.new(input)
 				arr.wasserscheide.append(wasserscheide)
 		
-		for fringe in Global.obj.blatt.arr.fringe:
-			if fringe.arr.dreieck.size() == 1:
-				var dreieck = fringe.arr.dreieck.front()
-				
-				for punkt in fringe.arr.punkt:
-					if dreieck.dict.wasserscheide.keys().has(punkt):
-						var neighbor_punkt = []
-						neighbor_punkt.append_array(fringe.arr.punkt)
-						neighbor_punkt.erase(punkt)
-						neighbor_punkt = neighbor_punkt.front()
-						
-						if !dreieck.dict.wasserscheide.keys().has(neighbor_punkt):
-							var point_on_fringe = Global.nearest_point_on_line_through_another_point(fringe, dreieck.obj.pole)
-							
-							for border in borders:
-								var lines = [border]
-								lines.append([point_on_fringe, dreieck.obj.pole.scene.myself.position])
-								var border_intersection = Global.line_line_intersection(lines)
-								
-								if border_intersection != null and Global.point_inside_rect(border_intersection, corners):
-									var points = [border_intersection]
-									
-									for pole in dreieck.dict.wasserscheide[punkt].arr.pole:
-										points.append(pole.scene.myself.position)
-									
-									var circumcenter = Global.get_circumcenter(points)
-									var r = circumcenter.distance_to(points.front())
-									var d = circumcenter.distance_to(neighbor_punkt.scene.myself.position)
-									
-									if d < r:
-										var input = {}
-										input.type = "pole"
-										input.blatt = Global.obj.blatt
-										input.position = border_intersection
-										var pole = Classes_0.Punkt.new(input)
-										pole.scene.myself.set_color(Color.RED)
-										Global.obj.blatt.arr.pole.append(pole)
-										pole.flag.border = true
-										
-										input = {}
-										input.type = "corner"
-										input.meer = self
-										input.fringe = fringe
-										input.poles = [pole]
-										input.poles.append(dreieck.obj.pole)
-										var wasserscheide = Classes_1.Wasserscheide.new(input)
-										wasserscheide.scene.myself.set_default_color(Color.AZURE)
-										arr.wasserscheide.append(wasserscheide)
+		var poles = {}
+		
+		for dreieck in Global.obj.blatt.arr.dreieck:
+			var size = dreieck.obj.pole.arr.wasserscheide.size()
 			
+			if size != 3:
+				if !poles.keys().has(size):
+					poles[size] = [dreieck.obj.pole]
+				else:
+					poles[size].append(dreieck.obj.pole)
+		
+		var sizes = [2]
+		
+		for size in sizes:
+			for pole in poles[size]:
+				var dreieck = pole.obj.circumcenter
+				var punkts = []
+				var neighbor_poles = []
+				punkts.append_array(dreieck.arr.punkt)
+				
+				for wasserscheide in pole.arr.wasserscheide:
+					var punkt = dreieck.dict.fringe[wasserscheide.obj.fringe]
+					punkts.erase(punkt)
+					var neighbor_pole = []
+					neighbor_pole.append_array(wasserscheide.arr.pole)
+					neighbor_pole.erase(pole)
+					neighbor_poles.append(neighbor_pole.front())
+				
+				var punkt = punkts.front()
+				punkt.scene.myself.set_color(Color.YELLOW)
+				var fringe = dreieck.get_opposite_fringe_by_punkt(punkts.front())
+				fringe.init_scene()
+				var point_on_fringe = Global.nearest_point_on_line_through_another_point(fringe, pole)
+				var angles = {}
+				angles.pole = []
+				angles.border = []
+				
+				for neighbor_pole in neighbor_poles:
+					var vector = neighbor_pole.scene.myself.position - pole.scene.myself.position
+					var angle = vector.angle()
+					angle *= 180/PI 
+					
+					angles.pole.append(angle)
+				
+				for angle in angles.pole:
+					angles.min = min(angles.pole.front(), angle)
+					angles.max = max(angles.pole.front(), angle)
+				
+				angles.coverage = abs(angles.max-angles.min)
+				angles.sign = sign(angles.min) == sign(angles.max)
+				print(angles)
+				
+				for border in borders:
+					var lines = [border]
+					lines.append([point_on_fringe, dreieck.obj.pole.scene.myself.position])
+					var border_intersection = Global.line_line_intersection(lines)
+					
+					if border_intersection != null and Global.point_inside_rect(border_intersection, corners):
+						var vector = border_intersection - pole.scene.myself.position
+						var angle = vector.angle()
+						angle *= 180/PI 
+						
+						var inside = angles.min <= angle and angles.max >= angle
+						var flag = true
+						print(angle)
+						if angles.sign:
+							flag = !inside
+						elif angles.coverage < 180:
+							flag = !inside
+						else:
+							flag = inside
+						
+						if flag:
+							angles.border.append(border_intersection)
+				
+				if angles.border.size() > 0:
+					var input = {}
+					input.type = "pole"
+					input.blatt = Global.obj.blatt
+					input.position = angles.border.front()
+					var pole_ = Classes_0.Punkt.new(input)
+					pole_.scene.myself.set_color(Color.RED)
+					Global.obj.blatt.arr.pole.append(pole_)
+					pole.flag.border = true
+					
+					input = {}
+					input.type = "corner"
+					input.meer = self
+					input.dreieck = dreieck
+					input.fringe = fringe
+					input.poles = [pole]
+					input.poles.append(pole_)
+					var wasserscheide = Classes_1.Wasserscheide.new(input)
+					wasserscheide.scene.myself.set_default_color(Color.AZURE)
+					arr.wasserscheide.append(wasserscheide)
+				if angles.border.size() != 1:
+					print("!error! wasserscheide borders != 1")
+					print(angles.border)
+					dreieck.obj.pole.scene.myself.set_color(Color.PURPLE)
+		
+		
 		for _i in range(arr.wasserscheide.size()-1, -1, -1):
 			var wasserscheide = arr.wasserscheide[_i]
-			var poles = []
+			poles = []
 			
 			for pole in wasserscheide.arr.pole:
 				if Global.point_inside_rect(pole.scene.myself.position, corners):

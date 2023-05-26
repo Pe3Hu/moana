@@ -24,6 +24,7 @@ class Punkt:
 		flag.border = false
 		arr.dreieck = []
 		arr.fringe = []
+		arr.wasserscheide = []
 		#dict.wasserscheide = {}
 		init_scene()
 
@@ -110,7 +111,7 @@ class Dreieck:
 		return edges
 
 
-	func get_edges_with_punkt(punkt_: Punkt) -> Array:
+	func get_adjacent_edges_by_punkt(punkt_: Punkt) -> Array:
 		var edges = get_edges()
 		
 		for _i in range(edges.size()-1, -1, -1):
@@ -120,6 +121,14 @@ class Dreieck:
 				edges.erase(edge)
 		
 		return edges
+
+
+	func get_opposite_fringe_by_punkt(punkt_: Punkt) -> Variant:
+		for fringe in dict.fringe.keys():
+			if dict.fringe[fringe] == punkt_:
+				return fringe
+		
+		return null
 
 
 	func become_obsolete() -> void:
@@ -142,6 +151,7 @@ class Dreieck:
 class Fringe:
 	var arr = {}
 	var obj = {}
+	var scene = {}
 
 
 	func _init(input_):
@@ -151,6 +161,12 @@ class Fringe:
 		
 		for punkt in arr.punkt:
 			punkt.arr.fringe.append(self)
+
+
+	func init_scene() -> void:
+		scene.myself = Global.scene.fringe.instantiate()
+		scene.myself.set_parent(self)
+		obj.blatt.scene.myself.get_node("Fringe").add_child(scene.myself)
 
 
 	func set_dreiecks() -> void:
@@ -201,18 +217,29 @@ class Blatt:
 		arr.pole = []
 		var w = Global.vec.size.window.width
 		var h = Global.vec.size.window.height
-		var n = 4
+		var n = 5
 		var gap = 0.3
+		var r = 150
 		var input = {}
 		input.type = "ship"
 		input.blatt = self
 		
 		for _i in n:
-			Global.rng.randomize()
-			var x = int(Global.rng.randf_range(gap, (1-gap)) * w)
-			Global.rng.randomize()
-			var y = int(Global.rng.randf_range(gap, (1-gap)) * h)
-			input.position = Vector2(x,y)
+			var flag = false
+			
+			while !flag:
+				flag = true
+				Global.rng.randomize()
+				var x = int(Global.rng.randf_range(gap, (1-gap)) * w)
+				Global.rng.randomize()
+				var y = int(Global.rng.randf_range(gap, (1-gap)) * h)
+				input.position = Vector2(x,y)
+				
+				for ship in arr.ship:
+					if input.position.distance_to(ship.scene.myself.position) < r:
+						flag = false
+						break
+				
 			var punkt = Classes_0.Punkt.new(input)
 			arr.ship.append(punkt)
 		
@@ -318,7 +345,7 @@ class Blatt:
 			var punkts = []
 			
 			for dreieck in ship.arr.dreieck:
-				var edges = dreieck.get_edges_with_punkt(ship)
+				var edges = dreieck.get_adjacent_edges_by_punkt(ship)
 				
 				for edge in edges:
 					edge.erase(ship)

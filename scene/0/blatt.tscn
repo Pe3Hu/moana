@@ -7,4 +7,6 @@ script = ExtResource("1_m6amn")
 
 [node name="Dreieck" type="Node2D" parent="."]
 
+[node name="Fringe" type="Node2D" parent="."]
+
 [node name="Punkt" type="Node2D" parent="."]

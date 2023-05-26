@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxb66aw2qshjm"]
+
+[ext_resource type="Script" path="res://scene/0/fringe.gd" id="1_7v50f"]
+
+[node name="Fringe" type="Line2D"]
+default_color = Color(0.368627, 0, 0.65098, 1)
+script = ExtResource("1_7v50f")

@@ -6,4 +6,6 @@ res://scene/1/wasserscheide.tscn
 res://scene/1/meer.tscn
 res://script/Classes_1.gd
 res://script/Classes_0.gd
-res://scene/0/punkt.gd
+res://scene/0/fringe.tscn
+res://scene/0/fringe.gd
+res://script/Global.gd

@@ -124,6 +124,7 @@ func init_node() -> void:
 func init_scene() -> void:
 	scene.blatt = load("res://scene/0/blatt.tscn")
 	scene.punkt = load("res://scene/0/punkt.tscn")
+	scene.fringe = load("res://scene/0/fringe.tscn")
 	scene.dreieck = load("res://scene/0/dreieck.tscn")
 	scene.meer = load("res://scene/1/meer.tscn")
 	scene.wasserscheide = load("res://scene/1/wasserscheide.tscn")
