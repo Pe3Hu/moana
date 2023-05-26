@@ -12,7 +12,8 @@ func _input(event) -> void:
 		match event.keycode:
 			KEY_SPACE:
 				if event.is_pressed() && !event.is_echo():
-					Global.obj.blatt.next_dreieck()
+					Global.obj.blatt.next_pair_ship_and_fringe()
+					#Global.obj.blatt.next_dreieck()
 
 
 func _process(delta_) -> void:

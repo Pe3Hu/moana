@@ -88,7 +88,7 @@ class Meer:
 
 	func _init():
 		init_scene()
-		init_wasserscheides()
+		#init_wasserscheides()
 
 
 	func init_scene() -> void:

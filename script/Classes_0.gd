@@ -123,6 +123,20 @@ class Dreieck:
 		return edges
 
 
+	func get_opposite_edge_by_punkt(punkt_: Punkt) -> Variant:
+		var all_edges = get_edges()
+		var adjacent_edges = get_adjacent_edges_by_punkt(punkt_)
+		
+		for edge in adjacent_edges:
+			all_edges.erase(edge)
+		
+		#print(all_edges.size(), all_edges.front(), adjacent_edges.size())
+		if all_edges.size() == 1:
+			return all_edges.front()
+		else:
+			return null
+
+
 	func get_opposite_fringe_by_punkt(punkt_: Punkt) -> Variant:
 		for fringe in dict.fringe.keys():
 			if dict.fringe[fringe] == punkt_:
@@ -157,10 +171,9 @@ class Fringe:
 	func _init(input_):
 		obj.blatt = input_.blatt
 		arr.punkt = input_.punkts
-		arr.dreieck = []
-		
-		for punkt in arr.punkt:
-			punkt.arr.fringe.append(self)
+		arr.dreieck = input_.dreiecks
+		init_scene()
+		set_punkts()
 
 
 	func init_scene() -> void:
@@ -169,38 +182,34 @@ class Fringe:
 		obj.blatt.scene.myself.get_node("Fringe").add_child(scene.myself)
 
 
-	func set_dreiecks() -> void:
-		var dreiecks = {}
-		
+	func set_punkts() -> void:
 		for punkt in arr.punkt:
-			for dreieck in punkt.arr.dreieck:
-				if dreiecks.keys().has(dreieck):
-					dreiecks[dreieck] += 1
-				else:
-					dreiecks[dreieck] = 1
+			punkt.arr.fringe.append(self)
 		
-		for dreieck in dreiecks.keys():
-			if dreiecks[dreieck] == 2:
-				arr.dreieck.append(dreieck)
-			
-			if !dreieck.dict.fringe.keys().has(self):
-				var punkts = []
-				punkts.append_array(dreieck.arr.punkt)
+		for dreieck in arr.dreieck:
+			for punkt in dreieck.arr.punkt:
+				var edge = dreieck.get_opposite_edge_by_punkt(punkt)
+				var flag = true
 				
-				for punkt in arr.punkt:
-					punkts.erase(punkt)
+				for punkt_ in arr.punkt:
+					flag = edge.has(punkt_) and flag
 				
-				dreieck.dict.fringe[self] = punkts.front()
+				if flag:
+					dreieck.dict.fringe[self] = punkt
+					break
 
 
 #лист blatt
 class Blatt:
+	var num = {}
 	var arr = {}
 	var obj = {}
 	var scene = {}
 
 
 	func _init():
+		num.dreieck = 0
+		num.ship = -1
 		init_scene()
 		init_ships()
 		init_dreiecks()
@@ -339,36 +348,71 @@ class Blatt:
 		arr.fringe = []
 		var ships = []
 		ships.append_array(arr.ship)
+		var hashes = []
+		var edges = {}
 		
-		while ships.size() > 0:
-			var ship = ships.front()
-			var punkts = []
-			
-			for dreieck in ship.arr.dreieck:
-				var edges = dreieck.get_adjacent_edges_by_punkt(ship)
+		for dreieck in arr.dreieck:
+			for ship in dreieck.arr.punkt:
+				var edge = dreieck.get_opposite_edge_by_punkt(ship)
+				var hash = edge.hash()
 				
-				for edge in edges:
-					edge.erase(ship)
-					var punkt = edge.front()
-					
-					if !punkts.has(punkt) and ships.has(punkt):
-						punkts.append(punkt)
-			
-			for punkt in punkts:
-				var flag = true
-				
-				if !ships.has(punkt):
-					flag = false
-					break
-				
-				if flag:
-					var input = {}
-					input.punkts = [ship,punkt]
-					input.blatt = self
-					var fringe = Classes_0.Fringe.new(input)
-					arr.fringe.append(fringe)
-			
-			ships.pop_front()
+				if !hashes.has(hash):
+					edges[edge] = [dreieck]
+					hashes.append(hash)
+				else:
+					edges[edge].append(dreieck)
 		
-		for fringe in arr.fringe:
-			fringe.set_dreiecks()
+		for edge in edges:
+			var input = {}
+			input.punkts = edge
+			input.dreiecks = edges[edge]
+			input.blatt = self
+			var fringe = Classes_0.Fringe.new(input)
+			arr.fringe.append(fringe)
+		
+		#for fringe in arr.fringe:
+		#	fringe.set_dreiecks()
+
+
+	func next_pair_ship_and_fringe() -> void:
+		var dreieck = arr.dreieck[num.dreieck]
+		var ship = dreieck.arr.punkt[num.ship]
+		var fringe = dreieck.get_opposite_fringe_by_punkt(ship)
+		ship.scene.myself.visible = false
+		fringe.scene.myself.visible = false
+		dreieck.scene.myself.update_color()
+		
+		num.ship += 1
+		
+		if num.ship >= dreieck.arr.punkt.size():
+			num.ship = 0
+			num.dreieck += 1
+			
+			if num.dreieck >= arr.dreieck.size():
+				num.dreieck = 0
+		
+		dreieck = arr.dreieck[num.dreieck]
+		ship = dreieck.arr.punkt[num.ship]
+		fringe = dreieck.get_opposite_fringe_by_punkt(ship)
+		ship.scene.myself.visible = true
+		fringe.scene.myself.visible = true
+		dreieck.scene.myself.set_color(Color.BLACK)
+
+
+	func next_pair_ship_and_dreieck() -> void:
+		var dreieck = arr.dreieck[num.dreieck]
+		dreieck.scene.myself.update_color()
+		
+		for ship in dreieck.arr.punkt:
+			ship.scene.myself.visible = false
+		
+		num.dreieck += 1
+		
+		if num.dreieck >= arr.dreieck.size():
+			num.dreieck = 0
+		
+		dreieck = arr.dreieck[num.dreieck]
+		dreieck.scene.myself.set_color(Color.BLACK)
+		
+		for ship in dreieck.arr.punkt:
+			ship.scene.myself.visible = true
