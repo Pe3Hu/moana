@@ -11,7 +11,7 @@ func set_parent(parent_) -> void:
 
 
 func set_vertexs() -> void:
-	points = []
+	clear_points()
 	
 	for pole in parent.arr.pole:
 		add_point(pole.scene.myself.position)

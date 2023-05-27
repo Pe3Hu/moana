@@ -51,11 +51,11 @@ class Punkt:
 			
 				scene.myself.queue_free()
 			"pole":
-				arr.wasserscheide = []
-				
 				for wasserscheide in arr.wasserscheide:
 					wasserscheide.arr.pole.erase(self)
 					wasserscheide.scene.myself.set_vertexs()
+				
+				arr.wasserscheide = []
 		
 		obj.blatt.arr[word.type].erase(self)
 
