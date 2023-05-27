@@ -25,7 +25,6 @@ class Punkt:
 		arr.dreieck = []
 		arr.fringe = []
 		arr.wasserscheide = []
-		#dict.wasserscheide = {}
 		init_scene()
 
 
@@ -49,13 +48,16 @@ class Punkt:
 				
 				for fringe in arr.fringe:
 					fringe.arr.ship.erase(self)
+			
+				scene.myself.queue_free()
 			"pole":
+				arr.wasserscheide = []
+				
 				for wasserscheide in arr.wasserscheide:
 					wasserscheide.arr.pole.erase(self)
 					wasserscheide.scene.myself.set_vertexs()
 		
 		obj.blatt.arr[word.type].erase(self)
-		scene.myself.queue_free()
 
 
 #треугольник dreieck
