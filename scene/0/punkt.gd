@@ -12,7 +12,7 @@ func set_parent(parent_) -> void:
 
 
 func set_vertexs() -> void:
-	var a = 10
+	var a = 7
 	var vertexs = []
 	
 	for neighbor in Global.dict.neighbor.linear2:

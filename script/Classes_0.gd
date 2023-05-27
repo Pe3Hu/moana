@@ -185,6 +185,7 @@ class Fringe:
 		arr.ship = input_.ships
 		arr.dreieck = input_.dreiecks
 		vec.intersection = null
+		obj.wasserscheide = null
 		init_scene()
 		set_punkts()
 
@@ -259,7 +260,7 @@ class Blatt:
 		var h = Global.vec.size.window.height
 		var n = 16
 		var gap = 0.05
-		var r = 150
+		var r = 50
 		var input = {}
 		input.type = "ship"
 		input.blatt = self
@@ -275,10 +276,10 @@ class Blatt:
 				var y = int(Global.rng.randf_range(gap, (1-gap)) * h)
 				input.position = Vector2(x,y)
 				
-				#for ship in arr.ship:
-				#	if input.position.distance_to(ship.scene.myself.position) < r:
-				#		flag = false
-				#		break
+				for ship in arr.ship:
+					if input.position.distance_to(ship.scene.myself.position) < r:
+						flag = false
+						break
 				
 			var punkt = Classes_0.Punkt.new(input)
 			arr.ship.append(punkt)
