@@ -350,20 +350,8 @@ func nearest_point_on_line_through_another_point(fringe_: Classes_0.Fringe, punk
 	var a = fringe_.arr.ship.front().scene.myself.position
 	var b = fringe_.arr.ship.back().scene.myself.position
 	var c = punkt_.scene.myself.position
-	
 	var ab = b-a
 	var ac = c-a
-	var proj = ab.dot(ac)
-	var l = ab.length_squared()
-	var d = proj/l
-	var dc = null
-#
-#	#if d <= 0:
-#	#	dc = a
-#	#elif d >= 1:
-#	#	dc = b
-#	#else:
-	dc = a + ab * d
 	return a+ac.project(ab)
 
 

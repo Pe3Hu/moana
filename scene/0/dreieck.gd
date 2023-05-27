@@ -24,8 +24,8 @@ func update_color() -> void:
 func set_vertexs() -> void:
 	var vertexs = []
 	
-	for punkt in parent.arr.punkt:
-		var vertex = punkt.scene.myself.position
+	for ship in parent.arr.ship:
+		var vertex = ship.scene.myself.position
 		vertexs.append(vertex)
 	
 	set_polygon(vertexs)

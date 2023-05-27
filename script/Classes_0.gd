@@ -42,14 +42,17 @@ class Punkt:
 			if punkt.num.index > num.index:
 				punkt.num.index -= 1
 		
-		for dreieck in arr.dreieck:
-			dreieck.arr.punkt.erase(self)
-		
-		for fringe in arr.fringe:
-			fringe.arr.ship.erase(self)
-		
-		for wasserscheide in arr.wasserscheide:
-			wasserscheide.arr.pole.erase(self)
+		match word.type:
+			"ship":
+				for dreieck in arr.dreieck:
+					dreieck.arr.ship.erase(self)
+				
+				for fringe in arr.fringe:
+					fringe.arr.ship.erase(self)
+			"pole":
+				for wasserscheide in arr.wasserscheide:
+					wasserscheide.arr.pole.erase(self)
+					wasserscheide.scene.myself.set_vertexs()
 		
 		obj.blatt.arr[word.type].erase(self)
 		scene.myself.queue_free()
@@ -69,14 +72,14 @@ class Dreieck:
 		num.index = Global.num.index.dreieck
 		Global.num.index.dreieck += 1
 		obj.blatt = input_.blatt
-		arr.punkt = input_.punkts
+		arr.ship = input_.ships
 		dict.wasserscheide = {}
 		dict.fringe = {}
 		init_scene()
 		set_circumcenter()
 		
-		for punkt in arr.punkt:
-			punkt.arr.dreieck.append(self)
+		for ship in arr.ship:
+			ship.arr.dreieck.append(self)
 
 
 	func init_scene() -> void:
@@ -88,8 +91,8 @@ class Dreieck:
 	func set_circumcenter() -> void:
 		var points = []
 		
-		for punkt in arr.punkt:
-			points.append(punkt.scene.myself.position)
+		for ship in arr.ship:
+			points.append(ship.scene.myself.position)
 		
 		vec.circumcenter = Global.get_circumcenter(points)
 		num.radius = vec.circumcenter.distance_to(points.front())
@@ -106,10 +109,10 @@ class Dreieck:
 	func get_edges() -> Array:
 		var edges = []
 		
-		for _i in arr.punkt.size():
-			var _j = (_i+1)%arr.punkt.size()
-			var a = arr.punkt[_i]
-			var b = arr.punkt[_j]
+		for _i in arr.ship.size():
+			var _j = (_i+1)%arr.ship.size()
+			var a = arr.ship[_i]
+			var b = arr.ship[_j]
 			var edge = [a,b]
 			edge.sort_custom(func(a, b): return a.num.index < b.num.index)
 			edges.append(edge)
@@ -163,8 +166,8 @@ class Dreieck:
 		obj.blatt.arr.pole.erase(obj.pole)
 		obj.pole.scene.myself.queue_free()
 		
-		for punkt in arr.punkt:
-			punkt.arr.dreieck.erase(self)
+		for ship in arr.ship:
+			ship.arr.dreieck.erase(self)
 
 
 #грань fringe
@@ -195,15 +198,15 @@ class Fringe:
 			ship.arr.fringe.append(self)
 		
 		for dreieck in arr.dreieck:
-			for punkt in dreieck.arr.punkt:
-				var edge = dreieck.get_opposite_edge_by_punkt(punkt)
+			for ship in dreieck.arr.ship:
+				var edge = dreieck.get_opposite_edge_by_punkt(ship)
 				var flag = true
 				
-				for ship in arr.ship:
-					flag = edge.has(ship) and flag
+				for ship_ in arr.ship:
+					flag = edge.has(ship_) and flag
 				
 				if flag:
-					dreieck.dict.fringe[self] = punkt
+					dreieck.dict.fringe[self] = ship
 					break
 
 
@@ -300,10 +303,10 @@ class Blatt:
 		arr.dreieck = []
 		var input = {}
 		input.blatt = self
-		input.punkts = []
+		input.ships = []
 		
 		for _i in range(arr.ship.size()-3, arr.ship.size(), 1):
-			input.punkts.append(arr.ship[_i])
+			input.ships.append(arr.ship[_i])
 		
 		var dreieck = Classes_0.Dreieck.new(input)
 		arr.dreieck.append(dreieck)
@@ -345,8 +348,8 @@ class Blatt:
 				var input = {}
 				input.blatt = self
 				input.punkts = []
-				input.punkts = [ship]
-				input.punkts.append_array(edge)
+				input.ships = [ship]
+				input.ships.append_array(edge)
 				var dreieck = Classes_0.Dreieck.new(input)
 				arr.dreieck.append(dreieck)
 			
@@ -358,15 +361,15 @@ class Blatt:
 
 	func erase_supra_triangle() -> void:
 		for _i in range(arr.ship.size()-1, -1, -1):
-			var punkt = arr.ship[_i]
+			var ship = arr.ship[_i]
 			
-			if punkt.flag.temp:
-				punkt.become_obsolete()
+			if ship.flag.temp:
+				ship.become_obsolete()
 		
 		for _i in range(arr.dreieck.size()-1, -1, -1):
 			var dreieck = arr.dreieck[_i]
 			
-			if dreieck.arr.punkt.size() < 3:
+			if dreieck.arr.ship.size() < 3:
 				dreieck.become_obsolete()
 
 
@@ -378,7 +381,7 @@ class Blatt:
 		var edges = {}
 		
 		for dreieck in arr.dreieck:
-			for ship in dreieck.arr.punkt:
+			for ship in dreieck.arr.ship:
 				var edge = dreieck.get_opposite_edge_by_punkt(ship)
 				var hash = edge.hash()
 				
